@@ -1,0 +1,34 @@
+{
+  "name": "explorer-booking",
+  "version": "1.0.0",
+  "description": "Modern booking system for adventure businesses",
+  "scripts": {
+    "install:all": "npm run install:frontend && npm run install:backend && npm run install:admin",
+    "install:frontend": "cd frontend && npm install",
+    "install:backend": "cd backend && npm install",
+    "install:admin": "cd admin && npm install",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:admin\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:admin": "cd admin && npm run dev",
+    "build": "npm run build:frontend && npm run build:backend && npm run build:admin",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "build:admin": "cd admin && npm run build",
+    "start": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && npm start",
+    "start:admin": "cd admin && npm start",
+    "test": "npm run test:frontend && npm run test:backend && npm run test:admin",
+    "test:frontend": "cd frontend && npm test",
+    "test:backend": "cd backend && npm test",
+    "test:admin": "cd admin && npm test",
+    "lint": "npm run lint:frontend && npm run lint:backend && npm run lint:admin",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:admin": "cd admin && npm run lint"
+  },
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
