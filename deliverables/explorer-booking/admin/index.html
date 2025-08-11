@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorer Shack Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">Explorer Shack Admin</h1>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600">Welcome, <span id="currentUser">Admin</span></span>
+                    <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        Add New Booking
+                    </button>
+                    <button onclick="logout()" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Analytics Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <i class="fas fa-calendar-check text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Bookings</p>
+                        <p class="text-2xl font-semibold text-gray-900" id="totalBookings">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <i class="fas fa-check-circle text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Confirmed</p>
+                        <p class="text-2xl font-semibold text-gray-900" id="confirmedBookings">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <i class="fas fa-clock text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Pending</p>
+                        <p class="text-2xl font-semibold text-gray-900" id="pendingBookings">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-red-100 text-red-600">
+                        <i class="fas fa-times-circle text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Cancelled</p>
+                        <p class="text-2xl font-semibold text-gray-900" id="cancelledBookings">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Booking Management</h2>
+            <div class="flex justify-between mb-4">
+                <input type="text" placeholder="Search bookings..." class="border rounded-lg px-4 py-2">
+                <select class="border rounded-lg px-4 py-2">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <table class="min-w-full">
+                <thead>
+                    <tr>
+                        <th class="text-left py-2">Booking ID</th>
+                        <th class="text-left py-2">Customer</th>
+                        <th class="text-left py-2">Adventure</th>
+                        <th class="text-left py-2">Date</th>
+                        <th class="text-left py-2">Status</th>
+                        <th class="text-left py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingsTableBody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-8 w-full max-w-md mx-4">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Admin Login</h2>
+                    <p class="text-gray-600 mt-2">Please sign in to access the dashboard</p>
+                </div>
+                <form id="loginForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Username</label>
+                            <input type="text" id="username" required class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Password</label>
+                            <input type="password" id="password" required class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
+                        Sign In
+                    </button>
+                </form>
+                <div class="mt-4 p-3 bg-gray-100 rounded text-sm text-gray-600">
+                    <strong>Demo Credentials:</strong><br>
+                    Username: admin<br>
+                    Password: password123
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="newBookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+                <h3 class="text-lg font-semibold mb-4">Add New Booking</h3>
+                <form id="newBookingForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block">Customer Name</label>
+                            <input type="text" id="customerName" class="w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label class="block">Adventure</label>
+                            <select id="adventure" class="w-full border rounded p-2">
+                                <option>Mountain Trek</option>
+                                <option>River Rafting</option>
+                                <option>Rock Climbing</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block">Date</label>
+                            <input type="date" id="bookingDate" class="w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label class="block">Status</label>
+                            <select id="status" class="w-full border rounded p-2">
+                                <option>Pending</option>
+                                <option>Confirmed</option>
+                                <option>Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
