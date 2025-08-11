@@ -1,0 +1,189 @@
+# Explorer Shack - Installation and Maintenance Guide for cPanel Deployment
+
+---
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Installation Steps](#installation-steps)
+- [Maintenance](#maintenance)
+- [Troubleshooting](#troubleshooting)
+- [Additional Resources](#additional-resources)
+- [Deployment Script (Example)](#deployment-script-example)
+
+---
+
+## Introduction
+
+This guide provides step-by-step instructions to install, configure, and maintain the Explorer Shack booking system on a cPanel web hosting environment. It covers prerequisites, deployment, database setup, configuration, and best practices for smooth operation.
+
+---
+
+## Prerequisites
+
+- cPanel access with File Manager, MySQL Database Wizard, and Terminal (SSH) access.
+- PHP version 7.4 or higher (if applicable).
+- Node.js installed on the server (for backend services).
+- MySQL or MariaDB database.
+- FTP or SFTP access for file uploads.
+- SSL certificate configured for secure HTTPS access.
+
+---
+
+## Installation Steps
+
+### 1. Upload Project Files
+
+- Use cPanel File Manager or FTP client to upload the entire project directory to the desired location (e.g., `public_html` or a subfolder).
+- Ensure all files and folders are uploaded with correct permissions (typically 755 for folders, 644 for files).
+### 2. Database Setup
+
+- Open cPanel MySQL Database Wizard.
+- Create a new database and database user with a strong password.
+- Assign the user to the database with all privileges.
+- Import the initial database schema and seed data using phpMyAdmin or command line:
+  ```
+  mysql -u username -p database_name < path/to/schema.sql
+  ```
+
+### 3. Configure Environment Variables
+
+- Edit the configuration files (e.g., `.env` or config files in backend) to set:
+  - Database connection details.
+  - SMTP email settings.
+  - API keys and secrets.
+  - Other system settings as per `control-center`.
+
+### 4. Install Dependencies
+
+- Access the server terminal via cPanel or SSH.
+- Navigate to the backend directory:
+  ```
+  cd path/to/project/backend
+  ```
+- Install Node.js dependencies:
+  ```
+  npm install
+  ```
+- Repeat for frontend and admin directories if applicable.
+
+### 5. Build and Start Services
+
+- Build frontend assets:
+  ```
+  npm run build
+  ```
+- Start backend server:
+  ```
+  npm start
+  ```
+- Configure process manager (e.g., PM2) for persistent backend service:
+  ```
+  pm2 start backend/dist/server.js --name explorer-shack-backend
+  pm2 save
+  pm2 startup
+  ```
+
+### 6. Configure Cron Jobs
+
+- Set up cron jobs in cPanel for scheduled tasks such as:
+  - Ticket triggering.
+  - Email notifications.
+  - Data cleanup.
+- Example cron command:
+  ```
+  cd path/to/project/backend && node scripts/ticket-trigger.js
+  ```
+
+### 7. SSL and Domain Setup
+
+- Ensure SSL certificate is installed and active.
+- Configure domain/subdomain to point to the project directory.
+- Force HTTPS redirection in `.htaccess` or server settings.
+
+---
+
+## Maintenance
+
+### Backup
+
+- Schedule regular backups of:
+  - Database (via cPanel Backup Wizard or mysqldump).
+  - Uploaded files and media.
+- Store backups securely offsite.
+
+### Updates and Deployment
+
+- Use the Control Center’s update feature to upload new development files and instruction files.
+- Alternatively, upload updated files via FTP and run migration scripts.
+- Use version control and maintain changelogs.
+- Test updates in a staging environment before production deployment.
+
+### Security
+
+- Regularly update dependencies and server software.
+- Monitor logs for suspicious activity.
+- Enforce strong passwords and two-factor authentication.
+- Limit access to admin and backend services.
+
+---
+
+## Troubleshooting
+
+- Check server error logs via cPanel.
+- Verify database connectivity and credentials.
+- Ensure correct file permissions.
+- Restart backend services if unresponsive.
+
+---
+
+## Additional Resources
+
+- [cPanel Documentation](https://docs.cpanel.net/)
+- [Node.js on cPanel](https://docs.cpanel.net/knowledge-base/web-services/how-to-run-nodejs-applications/)
+- [MySQL Database Management](https://dev.mysql.com/doc/)
+
+---
+
+## Deployment Script (Example)
+
+```bash
+#!/bin/bash
+
+# Variables
+PROJECT_DIR="/home/username/public_html/explorer-shack"
+BACKEND_DIR="$PROJECT_DIR/backend"
+FRONTEND_DIR="$PROJECT_DIR/frontend"
+ADMIN_DIR="$PROJECT_DIR/admin"
+
+# Pull latest code (if using Git)
+cd $PROJECT_DIR
+git pull origin main
+
+# Install dependencies
+cd $BACKEND_DIR
+npm install
+
+cd $FRONTEND_DIR
+npm install
+npm run build
+
+cd $ADMIN_DIR
+npm install
+
+# Restart backend service (using PM2)
+pm2 restart explorer-shack-backend
+
+echo "Deployment completed successfully."
+```
+
+---
+
+This guide ensures a smooth installation and maintenance process for Explorer Shack on cPanel hosting. Follow each step carefully and verify at each stage.
+
+For any issues, consult the logs and documentation or contact support.
+
+---
+
+*Document generated by BlackboxAI assistant.*
